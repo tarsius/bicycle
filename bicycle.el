@@ -162,26 +162,34 @@ If the section has no children then toggle between HIDE and SHOW.
 If the section has no body (not even empty lines), then there is
 only one state, EMPTY, and cycling does nothing.  If the section
 has no subsections but it contains code, then skip BRANCHES."
-  (setq deactivate-mark t)
-  (skip-chars-forward "\s\t")
-  (cond
-   ((and hs-minor-mode
-         (bicycle--code-level-p)
-         (or (hs-looking-at-block-start-p)
-             (hs-find-block-beginning)))
-    (hs-toggle-hiding)
-    (backward-char))
-   ((save-excursion
-      (beginning-of-line 1)
-      (not (looking-at outline-regexp)))
-    (outline-back-to-heading)
-    (when (bicycle--code-level-p)
-      (outline-up-heading 1)))
-   (t
-    (outline-back-to-heading)
-    (let ((eol (save-excursion (end-of-visible-line)    (point)))
-          (eoh (save-excursion (outline-end-of-heading) (point)))
-          (eos (save-excursion (outline-end-of-subtree) (point))))
+  (let ((eol (save-excursion (end-of-visible-line)    (point)))
+        (eoh (save-excursion (outline-end-of-heading) (point)))
+        (eos (save-excursion (outline-end-of-subtree) (point))))
+    (setq deactivate-mark t)
+    (skip-chars-forward "\s\t")
+    (cond
+     ((and hs-minor-mode
+           (bicycle--code-level-p)
+           (or (hs-looking-at-block-start-p)
+               (hs-find-block-beginning)))
+      (cond
+       ((outline-invisible-p eoh)
+        (outline-show-entry)
+        (hs-life-goes-on
+         (when (hs-already-hidden-p)
+           (hs-show-block)
+           (backward-char))))
+       (t
+        (hs-toggle-hiding)
+        (backward-char))))
+     ((save-excursion
+        (beginning-of-line 1)
+        (not (looking-at outline-regexp)))
+      (outline-back-to-heading)
+      (when (bicycle--code-level-p)
+        (outline-up-heading 1)))
+     (t
+      (outline-back-to-heading)
       (cond
        ((bicycle--code-level-p)
         (outline-toggle-children)
