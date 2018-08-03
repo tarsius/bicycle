@@ -180,7 +180,13 @@ has no subsections but it contains code, then skip BRANCHES."
            (hs-show-block)
            (backward-char))))
        (t
-        (hs-toggle-hiding)
+        (hs-life-goes-on
+         (if (hs-already-hidden-p)
+             (progn
+               (hs-show-block)
+               (outline-show-entry))
+           (hs-hide-block)
+           (outline-hide-entry)))
         (backward-char))))
      ((save-excursion
         (beginning-of-line 1)
