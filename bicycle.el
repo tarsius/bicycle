@@ -142,7 +142,7 @@ previous outline heading.
 If point is in between code blocks, then move to the previous
 outline heading.
 
-If point is withing an outline heading line, then rotate the
+If point is within an outline heading line, then rotate the
 visibility of that subtree through these four states:
 
 1. FOLDED:   Show only the current heading.
