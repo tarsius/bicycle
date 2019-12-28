@@ -104,6 +104,8 @@ Without a prefix argument call `bicycle-cycle-local'."
   (setq deactivate-mark t)
   (save-excursion
     (goto-char (point-min))
+    (unless (re-search-forward outline-regexp nil t)
+      (user-error "Found no heading"))
     (cond
      ((eq last-command 'outline-cycle-overview)
       (outline-map-region
