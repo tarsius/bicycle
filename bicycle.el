@@ -128,7 +128,7 @@ Without a prefix argument call `bicycle-cycle-local'."
       (outline-show-all)
       (bicycle--message "ALL"))
      (t
-      (outline-hide-sublevels (bicycle--level))
+      (outline-hide-sublevels (bicycle--top-level))
       (bicycle--message "OVERVIEW")
       (setq this-command 'outline-cycle-overview)))))
 
