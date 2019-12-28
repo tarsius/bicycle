@@ -271,8 +271,8 @@ The assumptions this function does not make are
 those mentioned in `outline-level's doc-string."
   (save-excursion
     (beginning-of-line)
-    (looking-at outline-regexp)
-    (funcall outline-level)))
+    (and (looking-at outline-regexp)
+         (funcall outline-level))))
 
 (defun bicycle--top-level ()
   "Return the number identifying the top-level in this buffer.
