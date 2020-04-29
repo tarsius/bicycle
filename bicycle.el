@@ -186,7 +186,8 @@ has no subsections but it contains code, then skip BRANCHES."
              (progn
                (hs-show-block)
                (outline-show-entry))
-           (hs-hide-block)))
+           (hs-hide-block)
+           (outline-hide-entry)))
         (backward-char))))
      ((save-excursion
         (beginning-of-line 1)
