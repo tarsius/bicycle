@@ -282,9 +282,10 @@ guess and risk that the guess was wrong, but sadly this
 number depends on the regexp used to identify headings."
   (save-excursion
     (goto-char (point-min))
-    (or (bicycle--level)
-        (and (outline-next-heading)
-             (bicycle--level)))))
+    (let ((min outline-code-level))
+      (while (outline-next-heading)
+        (setq min (min min (bicycle--level))))
+      min)))
 
 (defun bicycle--top-level-p ()
   "Return t if inside the heading of a top-level section."
