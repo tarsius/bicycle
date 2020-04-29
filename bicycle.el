@@ -58,7 +58,6 @@
 (require 'hideshow)
 (require 'outline)
 
-(defvar-local outline-top-level nil)
 (defvar-local outline-code-level 1000)
 
 ;;; Options
@@ -281,11 +280,9 @@ those mentioned in `outline-level's doc-string."
 Ideally this would always be 1, then we would not have to
 guess and risk that the guess was wrong, but sadly this
 number depends on the regexp used to identify headings."
-  (or outline-top-level
-      (setq outline-top-level
-            (save-excursion
-              (goto-char (point-min))
-              (bicycle--level)))))
+  (save-excursion
+    (goto-char (point-min))
+    (bicycle--level)))
 
 (defun bicycle--top-level-p ()
   "Return t if inside the heading of a top-level section."
