@@ -289,7 +289,8 @@ number depends on the regexp used to identify headings."
 
 (defun bicycle--top-level-p ()
   "Return t if inside the heading of a top-level section."
-  (= (bicycle--level) (bicycle--top-level)))
+  (= (bicycle--level)
+     (bicycle--top-level)))
 
 (defun bicycle--code-level-p ()
   "Return t if inside a code block.
