@@ -73,6 +73,15 @@
   :group 'bicycle
   :type 'boolean)
 
+(defcustom bicycle-hide-whole-block t
+  "Whether to hide the whole code block while cycling.
+
+When enabled, `outline-hide-entry' is called after
+`hs-hide-block' is used to hide a code block. This will hide the
+block's end delimiter and the following newline."
+  :group 'bicycle
+  :type 'boolean)
+
 ;;; Commands
 
 ;;;###autoload
@@ -185,9 +194,11 @@ has no subsections but it contains code, then skip BRANCHES."
          (if (hs-already-hidden-p)
              (progn
                (hs-show-block)
+               ;; TODO: Should this check `bicycle-hide-whole-block'?
                (outline-show-entry))
            (hs-hide-block)
-           (outline-hide-entry)))
+           (when bicycle-hide-whole-block
+             (outline-hide-entry))))
         (backward-char))))
      ((save-excursion
         (beginning-of-line 1)
