@@ -150,7 +150,7 @@ visibility of that subtree through these four states:
 2. CHILDREN: Show the current heading and recursively those
              of all subsections, without treating top-level
              code blocks as sections.
-3. BRANCHES: Show the current heading and recursivley those
+3. BRANCHES: Show the current heading and recursively those
              of all subsections, treating top-level code
              block as sections (i.e. their first line is
              treated as a heading).
