@@ -283,7 +283,7 @@ guess and risk that the guess was wrong, but sadly this
 number depends on the regexp used to identify headings."
   (save-excursion
     (goto-char (point-min))
-    (let ((min outline-code-level))
+    (let ((min (or (outline-minor-faces--level) outline-code-level)))
       (while (outline-next-heading)
         (setq min (min min (bicycle--level))))
       min)))
