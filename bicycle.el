@@ -101,37 +101,38 @@ Without a prefix argument call `bicycle-cycle-local'."
              or function)."
   (interactive)
   (setq deactivate-mark t)
-  (save-excursion
-    (goto-char (point-min))
-    (unless (re-search-forward outline-regexp nil t)
-      (user-error "Found no heading"))
-    (cond
-     ((eq last-command 'outline-cycle-overview)
-      (outline-map-region
-       (lambda ()
-         (when (and (bicycle--top-level-p)
-                    (bicycle--non-code-children-p))
-           (bicycle--show-children nil t)))
-       (point-min)
-       (point-max))
-      (bicycle--message "TOC")
-      (setq this-command 'outline-cycle-toc))
-     ((eq last-command 'outline-cycle-toc)
-      (outline-map-region
-       (lambda ()
-         (when (bicycle--top-level-p)
-           (outline-show-branches)))
-       (point-min)
-       (point-max))
-      (bicycle--message "TREES")
-      (setq this-command 'outline-cycle-trees))
-     ((eq last-command 'outline-cycle-trees)
-      (outline-show-all)
-      (bicycle--message "ALL"))
-     (t
-      (outline-hide-sublevels (bicycle--level))
-      (bicycle--message "OVERVIEW")
-      (setq this-command 'outline-cycle-overview)))))
+  (let ((top (bicycle--top-level)))
+    (save-excursion
+      (goto-char (point-min))
+      (unless (re-search-forward outline-regexp nil t)
+        (user-error "Found no heading"))
+      (cond
+       ((eq last-command 'outline-cycle-overview)
+        (outline-map-region
+         (lambda ()
+           (when (and (eq (bicycle--level) top)
+                      (bicycle--non-code-children-p))
+             (bicycle--show-children nil t)))
+         (point-min)
+         (point-max))
+        (bicycle--message "TOC")
+        (setq this-command 'outline-cycle-toc))
+       ((eq last-command 'outline-cycle-toc)
+        (outline-map-region
+         (lambda ()
+           (when (eq (bicycle--level) top)
+             (outline-show-branches)))
+         (point-min)
+         (point-max))
+        (bicycle--message "TREES")
+        (setq this-command 'outline-cycle-trees))
+       ((eq last-command 'outline-cycle-trees)
+        (outline-show-all)
+        (bicycle--message "ALL"))
+       (t
+        (outline-hide-sublevels (bicycle--level))
+        (bicycle--message "OVERVIEW")
+        (setq this-command 'outline-cycle-overview))))))
 
 (defun bicycle-cycle-local ()
   "Cycle visibility of the current section.
