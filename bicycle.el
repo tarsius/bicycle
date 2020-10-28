@@ -291,7 +291,7 @@ number depends on the regexp used to identify headings."
           (let ((min (or (bicycle--level) outline-code-level)))
             (while (outline-next-heading)
               (setq min (min min (bicycle--level))))
-            min)))))
+            (setq bicycle--top-level min))))))
 
 (defun bicycle--top-level-p ()
   "Return t if inside the heading of a top-level section."
