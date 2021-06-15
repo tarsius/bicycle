@@ -1,6 +1,6 @@
 ;;; bicycle.el --- cycle outline and code visibility  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2018-2020 Jonas Bernoulli
+;; Copyright (C) 2018-2021 Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/bicycle
@@ -251,14 +251,14 @@ is not considered to be a sublevel."
       (save-excursion
         (outline-back-to-heading)
         (while (and (not level) (outline-next-heading))
-	  (cond
+          (cond
            ((eobp)
-	    (setq level 1))
+            (setq level 1))
            ((bicycle--code-level-p)
             (unless level
               (setq eoc (1+ (point)))))
            ((not (> (point) eos))
-	    (setq level (max 1 (- (funcall outline-level) start-level)))))))
+            (setq level (max 1 (- (funcall outline-level) start-level)))))))
       (outline-show-children
        (or level (max 1 (- outline-code-level start-level))))
       (when (and eoc (not nocode))
