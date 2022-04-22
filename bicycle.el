@@ -6,7 +6,7 @@
 ;; Homepage: https://github.com/tarsius/bicycle
 ;; Keywords: outlines
 
-;; Package-Requires: ((emacs "25.1"))
+;; Package-Requires: ((emacs "25.1") (compat "28.1.1.0"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -54,6 +54,8 @@
 ;;     (add-hook 'prog-mode-hook #'hs-minor-mode))
 
 ;;; Code:
+
+(require 'compat)
 
 (require 'hideshow)
 (require 'outline)
