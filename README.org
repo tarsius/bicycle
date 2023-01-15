@@ -29,3 +29,8 @@ A reasonable configuration could be:
     (add-hook 'prog-mode-hook 'outline-minor-mode)
     (add-hook 'prog-mode-hook 'hs-minor-mode))
 #+end_src
+
+#+html: <br><br>
+#+html: <a href="https://github.com/tarsius/bicycle/actions/workflows/compile.yml"><img alt="Compile" src="https://github.com/tarsius/bicycle/actions/workflows/compile.yml/badge.svg"/></a>
+#+html: <a href="https://stable.melpa.org/#/bicycle"><img alt="MELPA Stable" src="https://stable.melpa.org/packages/bicycle-badge.svg"/></a>
+#+html: <a href="https://melpa.org/#/bicycle"><img alt="MELPA" src="https://melpa.org/packages/bicycle-badge.svg"/></a>
