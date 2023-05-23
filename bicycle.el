@@ -95,10 +95,12 @@ Without a prefix argument call `bicycle-cycle-local'."
 
 1. OVERVIEW: Show only top-level headings.
 2. TOC:      Show all headings, without treating top-level
-             code blocks as sections.
+             code blocks as sections.  Skipped if there are no
+             subheadings.
 3. TREES:    Show all headings, treating top-level code blocks
              as sections (i.e., their first line is treated as
-             a heading).
+             a heading). Skipped if there are no code block
+             subheadings.
 4. ALL:      Show everything, except code blocks that have been
              collapsed individually (using a `hideshow' command
              or function)."
@@ -109,27 +111,17 @@ Without a prefix argument call `bicycle-cycle-local'."
     (unless (re-search-forward outline-regexp nil t)
       (user-error "Found no heading"))
     (cond
-     ((eq last-command 'outline-cycle-overview)
-      (outline-map-region
-       (lambda ()
-         (when (and (bicycle--top-level-p)
-                    (bicycle--non-code-children-p))
-           (bicycle--show-children
-            (- outline-code-level (bicycle--top-level) 1)
-            t)))
-       (point-min)
-       (point-max))
-      (bicycle--message "TOC")
-      (setq this-command 'outline-cycle-toc))
-     ((eq last-command 'outline-cycle-toc)
-      (outline-map-region
-       (lambda ()
-         (when (bicycle--top-level-p)
-           (outline-show-branches)))
-       (point-min)
-       (point-max))
-      (bicycle--message "TREES")
-      (setq this-command 'outline-cycle-trees))
+     ((bicycle--maybe-cycle 'outline-cycle-overview 'outline-cycle-toc
+        (lambda () (and (bicycle--top-level-p) (bicycle--non-code-children-p)))
+        (lambda ()
+          (bicycle--show-children
+           (- outline-code-level (bicycle--top-level) 1)
+           t)))
+      (bicycle--message "TOC"))
+     ((bicycle--maybe-cycle 'outline-cycle-toc 'outline-cycle-trees
+        (lambda () (cdr (bicycle--child-types)))
+        #'outline-show-branches)
+      (bicycle--message "TREES"))
      ((eq last-command 'outline-cycle-trees)
       (outline-show-all)
       (bicycle--message "ALL"))
@@ -167,7 +159,8 @@ visibility of that subtree through these four states:
 If the section has no children then toggle between HIDE and SHOW.
 If the section has no body (not even empty lines), then there is
 only one state, EMPTY, and cycling does nothing.  If the section
-has no subsections but it contains code, then skip BRANCHES."
+has no subsections but it contains code, or if its children have
+no nested subsections, then skip BRANCHES."
   (let ((eol (save-excursion (end-of-visible-line)    (point)))
         (eoh (save-excursion (outline-end-of-heading) (point)))
         (eos (save-excursion (outline-end-of-subtree) (point))))
@@ -222,14 +215,12 @@ has no subsections but it contains code, then skip BRANCHES."
         (bicycle--show-children)
         (bicycle--message "CHILDREN")
         (setq this-command 'outline-cycle-children))
-       ((and (eq last-command 'outline-cycle-children)
-             (not (derived-mode-p 'outline-mode))
-             (or (bicycle--non-code-children-p)
-                 (prog1 nil
-                   (setq last-command 'outline-cycle-branches))))
-        (outline-show-branches)
-        (bicycle--message "BRANCHES")
-        (setq this-command 'outline-cycle-branches))
+       ((and (not (derived-mode-p 'outline-mode))
+             (bicycle--maybe-cycle 'outline-cycle-children 'outline-cycle-branches
+               #'bicycle--non-code-children-p
+               #'outline-show-branches
+               eoh eos))
+        (bicycle--message "BRANCHES"))
        ((eq last-command 'outline-cycle-branches)
         (outline-show-subtree)
         (bicycle--message "SUBTREE"))
@@ -238,6 +229,21 @@ has no subsections but it contains code, then skip BRANCHES."
         (bicycle--message "FOLDED")))))))
 
 ;;; Utilities
+
+(defun bicycle--maybe-cycle (last-cmd this-cmd pred cycle &optional beg end)
+  (declare (indent defun))
+  (and (eq last-command last-cmd)
+       (let ((noop t))
+         (outline-map-region (lambda ()
+                               (when (funcall pred)
+                                 (funcall cycle)
+                                 (setq noop nil)))
+                             (or beg (point-min))
+                             (or end (point-max)))
+         (if noop
+             (setq last-command this-cmd)
+           (setq this-command this-cmd))
+         (not noop))))
 
 (defun bicycle--show-children (&optional level nocode)
   "Show all direct subheadings of this heading.
