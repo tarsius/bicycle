@@ -114,7 +114,9 @@ Without a prefix argument call `bicycle-cycle-local'."
        (lambda ()
          (when (and (bicycle--top-level-p)
                     (bicycle--non-code-children-p))
-           (bicycle--show-children nil t)))
+           (bicycle--show-children
+            (- outline-code-level (bicycle--top-level) 1)
+            t)))
        (point-min)
        (point-max))
       (bicycle--message "TOC")
