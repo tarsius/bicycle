@@ -96,7 +96,7 @@ Without a prefix argument call `bicycle-cycle-local'."
 2. TOC:      Show all headings, without treating top-level
              code blocks as sections.
 3. TREES:    Show all headings, treaing top-level code blocks
-             as sections (i.e. their first line is treated as
+             as sections (i.e., their first line is treated as
              a heading).
 4. ALL:      Show everything, except code blocks that have been
              collapsed individually (using a `hideshow' command
@@ -154,7 +154,7 @@ visibility of that subtree through these four states:
              code blocks as sections.
 3. BRANCHES: Show the current heading and recursively those
              of all subsections, treating top-level code
-             block as sections (i.e. their first line is
+             block as sections (i.e., their first line is
              treated as a heading).
 4. SUBTREE:  Show the entire subtree, including code blocks,
              empty lines and comments.  Do not expand code
