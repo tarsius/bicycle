@@ -93,10 +93,10 @@ Without a prefix argument call `bicycle-cycle-local'."
 (defun bicycle-cycle-global ()
   "Cycle visibility of all sections.
 
-1. OVERVIEW: Show only top-level heading.
+1. OVERVIEW: Show only top-level headings.
 2. TOC:      Show all headings, without treating top-level
              code blocks as sections.
-3. TREES:    Show all headings, treaing top-level code blocks
+3. TREES:    Show all headings, treating top-level code blocks
              as sections (i.e., their first line is treated as
              a heading).
 4. ALL:      Show everything, except code blocks that have been
