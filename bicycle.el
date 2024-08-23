@@ -94,16 +94,23 @@ Without a prefix argument call `bicycle-cycle-local'."
   "Cycle visibility of all sections.
 
 1. OVERVIEW: Show only top-level headings.
-2. TOC:      Show all headings, without treating top-level
-             code blocks as sections.  Skipped if there are no
-             subheadings.
-3. TREES:    Show all headings, treating top-level code blocks
-             as sections (i.e., their first line is treated as
-             a heading). Skipped if there are no code block
-             subheadings.
-4. ALL:      Show everything, except code blocks that have been
-             collapsed individually (using a `hideshow' command
-             or function)."
+
+(2. There is equivalent of `bicycle-cycle-local's CHILDREN state.)
+
+3. TOC:      Recursively show all headings,
+             without treating code blocks as sections.
+
+4. TREES:    Recursively show all headings,
+             treating code blocks as sections
+             (i.e., their first line is treated as a heading).
+
+5. ALL:      Show everything, including code blocks,
+             empty lines and comments.
+             However, do not expand code blocks that were
+             previously collapsed individually.
+
+In situations when cycling to a state makes no difference compared
+to the previous state, then immediately continue to the next state."
   (interactive)
   (setq deactivate-mark t)
   (save-excursion
@@ -162,10 +169,12 @@ visibility of that subtree through these four states:
              previously collapsed individually.
 
 If the section has no children then toggle between HIDE and SHOW.
+This also works for code blocks.  This is one way to collapsed a
+code block \"individually\", with has the side-effect mentioned
+above.
+
 If the section has no body (not even empty lines), then there is
-only one state, EMPTY, and cycling does nothing.  If the section
-has no subsections but it contains code, or if its children have
-no nested subsections, then skip BRANCHES."
+only one state, EMPTY, and cycling does nothing."
   (let ((eol (save-excursion (end-of-visible-line)    (point)))
         (eoh (save-excursion (outline-end-of-heading) (point)))
         (eos (save-excursion (outline-end-of-subtree) (point))))
