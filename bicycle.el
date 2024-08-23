@@ -144,17 +144,22 @@ If point is within an outline heading line, then rotate the
 visibility of that subtree through these four states:
 
 1. FOLDED:   Show only the current heading.
-2. CHILDREN: Show the current heading and recursively those
-             of all subsections, without treating top-level
-             code blocks as sections.
-3. BRANCHES: Show the current heading and recursively those
-             of all subsections, treating top-level code
-             block as sections (i.e., their first line is
-             treated as a heading).
-4. SUBTREE:  Show the entire subtree, including code blocks,
-             empty lines and comments.  Do not expand code
-             blocks that have been collapsed individually.
-             (using a `hideshow' command or function).
+
+2. CHILDREN: Show headings of children,
+             treating top-level code block as sections
+             (i.e., their first line is treated as a heading).
+
+3. HEADINGS: Recursively show headings of all subsections,
+             without treating top-level code blocks as sections.
+
+3. BRANCHES: Recursively show headings of all subsections,
+             treating top-level code block as sections
+             (i.e., their first line is treated as a heading).
+
+5. SUBTREE:  Show the entire subtree, including code blocks,
+             empty lines and comments.
+             However, do not expand code blocks that were
+             previously collapsed individually.
 
 If the section has no children then toggle between HIDE and SHOW.
 If the section has no body (not even empty lines), then there is
@@ -216,8 +221,16 @@ no nested subsections, then skip BRANCHES."
         (bicycle--message "CHILDREN")
         (setq this-command 'outline-cycle-children))
        ((and (not (derived-mode-p 'outline-mode))
-             (bicycle--maybe-cycle 'outline-cycle-children 'outline-cycle-branches
+             (bicycle--maybe-cycle
+               'outline-cycle-children 'outline-cycle-headings
                #'bicycle--non-code-children-p
+               #'outline-show-children
+               eoh eos))
+        (bicycle--message "HEADINGS"))
+       ((and (not (derived-mode-p 'outline-mode))
+             (bicycle--maybe-cycle
+               'outline-cycle-headings 'outline-cycle-branches
+               (lambda () (not (bicycle--code-level-p)))
                #'outline-show-branches
                eoh eos))
         (bicycle--message "BRANCHES"))
