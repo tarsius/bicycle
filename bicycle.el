@@ -203,7 +203,7 @@ only one state, EMPTY, and cycling does nothing."
         (backward-char))))
      ((save-excursion
         (beginning-of-line 1)
-        (not (looking-at outline-regexp)))
+        (not (outline-on-heading-p t)))
       (outline-back-to-heading)
       (when (bicycle--code-level-p)
         (outline-up-heading 1)))
@@ -301,12 +301,12 @@ is not considered to be a sublevel."
           (outline-map-region #'outline-show-heading (point) eoc))))))
 
 (defun bicycle--level ()
-  "Like `outline-level' but with fewer assumptions.
-The assumptions this function does not make are
-those mentioned in `outline-level's doc-string."
-  (save-excursion
-    (beginning-of-line)
-    (and (looking-at outline-regexp)
+  "Return the depth to which a statement is nested in the outline.
+Point must be on a header line (but unlike for `outline-level',
+not necessarily at its beginning)."
+  (and (outline-on-heading-p t)
+       (save-excursion
+         (beginning-of-line)
          (funcall outline-level))))
 
 (defvar-local bicycle--top-level nil)
