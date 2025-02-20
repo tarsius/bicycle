@@ -95,7 +95,8 @@ Without a prefix argument call `bicycle-cycle-local'."
 
 1. OVERVIEW: Show only top-level headings.
 
-(2. There is equivalent of `bicycle-cycle-local's CHILDREN state.)
+\(2.          There is no equivalent of `bicycle-cycle-local's
+             CHILDREN state.)
 
 3. TOC:      Recursively show all headings,
              without treating code blocks as sections.
@@ -361,7 +362,7 @@ return nil."
 If the current section has no children, then return nil.
 Otherwise return (HEADINGS . CODE), where HEADINGS and
 CODE are booleans indicating whether the section contains
-headings and/or code blocks. "
+headings and/or code blocks."
   (let (headings code)
     (catch 'both
       (save-excursion
