@@ -191,17 +191,15 @@ only one state, EMPTY, and cycling does nothing."
         (outline-show-entry)
         (hs-life-goes-on
          (when (hs-already-hidden-p)
-           (hs-show-block)
-           (backward-char))))
+           (save-excursion (hs-show-block)))))
        (t
         (hs-life-goes-on
          (if (hs-already-hidden-p)
              (progn
-               (hs-show-block)
+               (save-excursion (hs-show-block))
                (outline-show-entry))
-           (hs-hide-block)
-           (outline-hide-entry)))
-        (backward-char))))
+           (save-excursion (hs-hide-block))
+           (outline-hide-entry))))))
      ((save-excursion
         (beginning-of-line 1)
         (not (outline-on-heading-p t)))
