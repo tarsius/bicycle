@@ -6,7 +6,7 @@
 ;; Homepage: https://github.com/tarsius/bicycle
 ;; Keywords: outlines
 
-;; Package-Version: 1.1.0
+;; Package-Version: 1.1.1
 ;; Package-Requires: (
 ;;     (emacs  "28.1")
 ;;     (compat "30.1"))
