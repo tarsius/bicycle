@@ -186,8 +186,10 @@ only one state, EMPTY, and cycling does nothing."
     (cond
      ((and hs-minor-mode
            (bicycle--code-level-p)
-           (or (hs-looking-at-block-start-p)
-               (hs-find-block-beginning)))
+           (static-if (fboundp 'hs-find-block-beg-fn--default)
+               (hs-find-block-beg-fn--default)
+             (or (hs-looking-at-block-start-p)
+                 (hs-find-block-beginning))))
       (cond
        ((outline-invisible-p eoh)
         (outline-show-entry)
