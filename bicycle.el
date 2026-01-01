@@ -121,24 +121,24 @@ to the previous state, then immediately continue to the next state."
     (unless (re-search-forward outline-regexp nil t)
       (user-error "Found no heading"))
     (cond
-     ((bicycle--maybe-cycle 'outline-cycle-overview 'outline-cycle-toc
-        (lambda () (and (bicycle--top-level-p) (bicycle--non-code-children-p)))
-        (lambda ()
-          (bicycle--show-children
-           (- outline-code-level (bicycle--top-level) 1)
-           t)))
-      (bicycle--message "TOC"))
-     ((bicycle--maybe-cycle 'outline-cycle-toc 'outline-cycle-trees
-        (lambda () (cdr (bicycle--child-types)))
-        #'outline-show-branches)
-      (bicycle--message "TREES"))
-     ((eq last-command 'outline-cycle-trees)
-      (outline-show-all)
-      (bicycle--message "ALL"))
-     (t
-      (outline-hide-sublevels (bicycle--level))
-      (bicycle--message "OVERVIEW")
-      (setq this-command 'outline-cycle-overview)))))
+      ((bicycle--maybe-cycle 'outline-cycle-overview 'outline-cycle-toc
+                             (lambda () (and (bicycle--top-level-p) (bicycle--non-code-children-p)))
+                             (lambda ()
+                               (bicycle--show-children
+                                (- outline-code-level (bicycle--top-level) 1)
+                                t)))
+       (bicycle--message "TOC"))
+      ((bicycle--maybe-cycle 'outline-cycle-toc 'outline-cycle-trees
+                             (lambda () (cdr (bicycle--child-types)))
+                             #'outline-show-branches)
+       (bicycle--message "TREES"))
+      ((eq last-command 'outline-cycle-trees)
+       (outline-show-all)
+       (bicycle--message "ALL"))
+      (t
+       (outline-hide-sublevels (bicycle--level))
+       (bicycle--message "OVERVIEW")
+       (setq this-command 'outline-cycle-overview)))))
 
 (defun bicycle-cycle-local ()
   "Cycle visibility of the current section.
@@ -184,74 +184,74 @@ only one state, EMPTY, and cycling does nothing."
     (setq deactivate-mark t)
     (skip-chars-forward "\s\t")
     (cond
-     ((and hs-minor-mode
-           (bicycle--code-level-p)
-           (static-if (fboundp 'hs-find-block-beg-fn--default)
-               (hs-find-block-beg-fn--default)
-             (or (hs-looking-at-block-start-p)
-                 (hs-find-block-beginning))))
-      (cond
-       ((outline-invisible-p eoh)
-        (outline-show-entry)
-        (hs-life-goes-on
-         (when (hs-already-hidden-p)
-           (save-excursion (hs-show-block)))))
-       (t
-        (hs-life-goes-on
-         (if (hs-already-hidden-p)
-             (progn
-               (save-excursion (hs-show-block))
-               (outline-show-entry))
-           (save-excursion (hs-hide-block))
-           (outline-hide-entry))))))
-     ((save-excursion
-        (beginning-of-line 1)
-        (not (outline-on-heading-p t)))
-      (outline-back-to-heading)
-      (when (bicycle--code-level-p)
-        (outline-up-heading 1)))
-     (t
-      (outline-back-to-heading)
-      (cond
-       ((bicycle--code-level-p)
-        (outline-toggle-children)
-        (bicycle--message "CODE"))
-       ((or (= eos eoh)
-            (= (1+ eoh) (point-max)))
-        (outline-show-entry)
-        (bicycle--message "EMPTY"))
-       ((null (bicycle--child-types))
-        (cond ((outline-invisible-p eoh)
-               (outline-show-entry)
-               (bicycle--message "SHOW"))
-              (t
-               (outline-hide-entry)
-               (bicycle--message "HIDE"))))
-       ((and (>= eol eos)
-             (not (eq last-command 'outline-cycle-children)))
-        (bicycle--show-children)
-        (bicycle--message "CHILDREN")
-        (setq this-command 'outline-cycle-children))
-       ((and (not (derived-mode-p 'outline-mode))
-             (bicycle--maybe-cycle
-               'outline-cycle-children 'outline-cycle-headings
-               #'bicycle--non-code-children-p
-               #'outline-show-children
-               eoh eos))
-        (bicycle--message "HEADINGS"))
-       ((and (not (derived-mode-p 'outline-mode))
-             (bicycle--maybe-cycle
-               'outline-cycle-headings 'outline-cycle-branches
-               (lambda () (not (bicycle--code-level-p)))
-               #'outline-show-branches
-               eoh eos))
-        (bicycle--message "BRANCHES"))
-       ((eq last-command 'outline-cycle-branches)
-        (outline-show-subtree)
-        (bicycle--message "SUBTREE"))
-       (t
-        (outline-hide-subtree)
-        (bicycle--message "FOLDED")))))))
+      ((and hs-minor-mode
+            (bicycle--code-level-p)
+            (static-if (fboundp 'hs-find-block-beg-fn--default)
+                (hs-find-block-beg-fn--default)
+              (or (hs-looking-at-block-start-p)
+                  (hs-find-block-beginning))))
+       (cond
+         ((outline-invisible-p eoh)
+          (outline-show-entry)
+          (hs-life-goes-on
+           (when (hs-already-hidden-p)
+             (save-excursion (hs-show-block)))))
+         (t
+          (hs-life-goes-on
+           (if (hs-already-hidden-p)
+               (progn
+                 (save-excursion (hs-show-block))
+                 (outline-show-entry))
+             (save-excursion (hs-hide-block))
+             (outline-hide-entry))))))
+      ((save-excursion
+         (beginning-of-line 1)
+         (not (outline-on-heading-p t)))
+       (outline-back-to-heading)
+       (when (bicycle--code-level-p)
+         (outline-up-heading 1)))
+      (t
+       (outline-back-to-heading)
+       (cond
+         ((bicycle--code-level-p)
+          (outline-toggle-children)
+          (bicycle--message "CODE"))
+         ((or (= eos eoh)
+              (= (1+ eoh) (point-max)))
+          (outline-show-entry)
+          (bicycle--message "EMPTY"))
+         ((null (bicycle--child-types))
+          (cond ((outline-invisible-p eoh)
+                 (outline-show-entry)
+                 (bicycle--message "SHOW"))
+                (t
+                 (outline-hide-entry)
+                 (bicycle--message "HIDE"))))
+         ((and (>= eol eos)
+               (not (eq last-command 'outline-cycle-children)))
+          (bicycle--show-children)
+          (bicycle--message "CHILDREN")
+          (setq this-command 'outline-cycle-children))
+         ((and (not (derived-mode-p 'outline-mode))
+               (bicycle--maybe-cycle
+                'outline-cycle-children 'outline-cycle-headings
+                #'bicycle--non-code-children-p
+                #'outline-show-children
+                eoh eos))
+          (bicycle--message "HEADINGS"))
+         ((and (not (derived-mode-p 'outline-mode))
+               (bicycle--maybe-cycle
+                'outline-cycle-headings 'outline-cycle-branches
+                (lambda () (not (bicycle--code-level-p)))
+                #'outline-show-branches
+                eoh eos))
+          (bicycle--message "BRANCHES"))
+         ((eq last-command 'outline-cycle-branches)
+          (outline-show-subtree)
+          (bicycle--message "SUBTREE"))
+         (t
+          (outline-hide-subtree)
+          (bicycle--message "FOLDED")))))))
 
 ;;; Utilities
 
@@ -288,13 +288,13 @@ is not considered to be a sublevel."
         (outline-back-to-heading)
         (while (and (not level) (outline-next-heading))
           (cond
-           ((eobp)
-            (setq level 1))
-           ((bicycle--code-level-p)
-            (unless level
-              (setq eoc (1+ (point)))))
-           ((not (> (point) eos))
-            (setq level (max 1 (- (funcall outline-level) start-level)))))))
+            ((eobp)
+             (setq level 1))
+            ((bicycle--code-level-p)
+             (unless level
+               (setq eoc (1+ (point)))))
+            ((not (> (point) eos))
+             (setq level (max 1 (- (funcall outline-level) start-level)))))))
       (outline-show-children
        (or level (max 1 (- outline-code-level start-level))))
       (when (and eoc (not nocode))
@@ -392,5 +392,6 @@ headings and/or code blocks."
 (provide 'bicycle)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
+;; lisp-indent-local-overrides: ((cond . 0))
 ;; End:
 ;;; bicycle.el ends here
