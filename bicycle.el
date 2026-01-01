@@ -392,6 +392,6 @@ headings and/or code blocks."
 (provide 'bicycle)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
-;; lisp-indent-local-overrides: ((cond . 0))
+;; lisp-indent-local-overrides: ((cond . 0) (interactive . 0))
 ;; End:
 ;;; bicycle.el ends here
