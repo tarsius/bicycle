@@ -282,7 +282,12 @@ is not considered to be a sublevel."
           (not (bicycle--non-code-children-p)))
       (outline-show-children level)
     (let ((start-level (funcall outline-level))
-          (eos (save-excursion (outline-end-of-subtree) (point)))
+          (eos (cl-letf (((symbol-function #'outline-back-to-heading)
+                          (lambda (&rest _)
+                            (or (ignore-error outline-before-first-heading
+                                  (progn (outline-back-to-heading) (point)))
+                                (goto-char (point-min))))))
+                 (save-excursion (outline-end-of-subtree) (point))))
           (eoc nil))
       (save-excursion
         (outline-back-to-heading)
