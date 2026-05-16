@@ -121,16 +121,18 @@ to the previous state, then immediately continue to the next state."
     (unless (re-search-forward outline-regexp nil t)
       (user-error "Found no heading"))
     (cond
-      ((bicycle--maybe-cycle 'outline-cycle-overview 'outline-cycle-toc
-                             (lambda () (and (bicycle--top-level-p) (bicycle--non-code-children-p)))
-                             (lambda ()
-                               (bicycle--show-children
-                                (- outline-code-level (bicycle--top-level) 1)
-                                t)))
+      ((bicycle--maybe-cycle
+        'outline-cycle-overview 'outline-cycle-toc
+        (lambda () (and (bicycle--top-level-p) (bicycle--non-code-children-p)))
+        (lambda ()
+          (bicycle--show-children
+           (- outline-code-level (bicycle--top-level) 1)
+           t)))
        (bicycle--message "TOC"))
-      ((bicycle--maybe-cycle 'outline-cycle-toc 'outline-cycle-trees
-                             (lambda () (cdr (bicycle--child-types)))
-                             #'outline-show-branches)
+      ((bicycle--maybe-cycle
+        'outline-cycle-toc 'outline-cycle-trees
+        (lambda () (cdr (bicycle--child-types)))
+        #'outline-show-branches)
        (bicycle--message "TREES"))
       ((eq last-command 'outline-cycle-trees)
        (outline-show-all)
