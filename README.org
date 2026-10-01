@@ -34,3 +34,4 @@ A reasonable configuration could be:
 #+html: <a href="https://github.com/tarsius/bicycle/actions/workflows/compile.yml"><img alt="Compile" src="https://github.com/tarsius/bicycle/actions/workflows/compile.yml/badge.svg"/></a>
 #+html: <a href="https://snapshots.melpa.org/#/bicycle"><img alt="MELPA Snapshots" src="https://snapshots.melpa.org/packages/bicycle-badge.svg"/></a>
 #+html: <a href="https://releases.melpa.org/#/bicycle"><img alt="MELPA Releases" src="https://releases.melpa.org/packages/bicycle-badge.svg"/></a>
+#+html: <a href="https://emacsair.me/human"><img alt="human made" src="https://emacsair.me/assets/badges/human.svg"/></a>
